@@ -9,6 +9,7 @@
 
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap-theme.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap-switch.min.css') }}">
 </head>
 
 <body>
@@ -41,10 +42,48 @@
 				</button>
 			</div>
 		</div>
+		<div class="row">&nbsp;</div>
+		<div class="row">
+			<div class="col-md-2 col-xs-4">
+				<input type="checkbox" id="led1-checkbox" checked>
+			</div>
+			<div class="col-md-2 col-xs-4">
+				<button id="led2-button" type="button" class="btn btn-default btn-lg">
+					LED2
+				</button>
+			</div>
+		</div>
+		<div class="row">&nbsp;</div>
+		<div class="row">
+			<div class="col-md-2 col-xs-4">
+				<button id="oc1-button" type="button" class="btn btn-default btn-lg">
+					OC1
+				</button>
+			</div>
+			<div class="col-md-2 col-xs-4">
+				<button id="oc2-button" type="button" class="btn btn-default btn-lg">
+					OC2
+				</button>
+			</div>
+		</div>
+		<div class="row">&nbsp;</div>
+		<div class="row">
+			<div class="col-md-2 col-xs-4">
+				<button id="sw1-button" type="button" class="btn btn-default btn-lg">
+					SW1
+				</button>
+			</div>
+			<div class="col-md-2 col-xs-4">
+				<button id="sw2-button" type="button" class="btn btn-default btn-lg">
+					SW2
+				</button>
+			</div>
+		</div>
 	</div>
 
 	<script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
 	<script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/bootstrap-switch.min.js') }}"></script>
 	<script>
 
 	var robotboard = (function () {
@@ -64,6 +103,15 @@
 			stop: function() {
 				$.getJSON( "stop");
 			},
+			led1: function(state) {
+				$.ajax({
+					type: 'POST',
+					url: '/led1',
+					data: '{"state": "' + state.toString() + '"}',
+					contentType: "application/json",
+					dataType: 'json'
+				});
+			}
 		};
 	})();
 
@@ -73,6 +121,7 @@
 		$('#reverse-button').click(robotboard.reverse);
 		$('#right-button').click(robotboard.right);
 		$('#left-button').click(robotboard.left);
+		$("#led1-checkbox").bootstrapSwitch();
 	});
 	</script>
 </body>
