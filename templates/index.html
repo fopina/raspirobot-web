@@ -13,7 +13,7 @@
 </head>
 
 <body>
-	<div class="container" style="margin-top:10px;">
+	<div class="container text-center" style="margin-top:10px;">
 		<div class="row">
 			<div class="col-md-1 col-xs-2"></div>
 			<div class="col-md-2 col-xs-4">
@@ -45,36 +45,30 @@
 		<div class="row">&nbsp;</div>
 		<div class="row">
 			<div class="col-md-2 col-xs-4">
-				<input type="checkbox" id="led1-checkbox" checked>
+				<input type="checkbox" id="led1-checkbox" data-label-text="LED1" class="output-switch">
 			</div>
 			<div class="col-md-2 col-xs-4">
-				<button id="led2-button" type="button" class="btn btn-default btn-lg">
-					LED2
-				</button>
+				<input type="checkbox" id="led2-checkbox" data-label-text="LED2" class="output-switch">
 			</div>
 		</div>
 		<div class="row">&nbsp;</div>
 		<div class="row">
 			<div class="col-md-2 col-xs-4">
-				<button id="oc1-button" type="button" class="btn btn-default btn-lg">
-					OC1
-				</button>
+				<input type="checkbox" id="oc1-checkbox" data-label-text="OC1" class="output-switch">
 			</div>
 			<div class="col-md-2 col-xs-4">
-				<button id="oc2-button" type="button" class="btn btn-default btn-lg">
-					OC2
-				</button>
+				<input type="checkbox" id="oc2-checkbox" data-label-text="OC2" class="output-switch">
 			</div>
 		</div>
 		<div class="row">&nbsp;</div>
 		<div class="row">
 			<div class="col-md-2 col-xs-4">
-				<button id="sw1-button" type="button" class="btn btn-default btn-lg">
+				<button id="sw1-button" type="button" class="btn btn-default btn-lg input-switch">
 					SW1
 				</button>
 			</div>
 			<div class="col-md-2 col-xs-4">
-				<button id="sw2-button" type="button" class="btn btn-default btn-lg">
+				<button id="sw2-button" type="button" class="btn btn-default btn-lg input-switch">
 					SW2
 				</button>
 			</div>
@@ -103,15 +97,25 @@
 			stop: function() {
 				$.getJSON( "stop");
 			},
-			led1: function(state) {
+			outputSwitch: function(name, state) {
 				$.ajax({
 					type: 'POST',
-					url: '/led1',
-					data: '{"state": "' + state.toString() + '"}',
+					url: '/output/' + name,
+					data: JSON.stringify( {
+						'state': state
+					}),
 					contentType: "application/json",
 					dataType: 'json'
 				});
-			}
+			},
+			inputClosed: function(name) {
+				$.getJSON( "input/" + name, function(data) {
+					if (data['closed'])
+						alert('Input ' + name + ' is closed');
+					else
+						alert('Input ' + name + ' is open');
+				});
+			},
 		};
 	})();
 
@@ -121,7 +125,15 @@
 		$('#reverse-button').click(robotboard.reverse);
 		$('#right-button').click(robotboard.right);
 		$('#left-button').click(robotboard.left);
-		$("#led1-checkbox").bootstrapSwitch();
+		$(".output-switch").bootstrapSwitch();
+		$(".output-switch").on('switchChange.bootstrapSwitch', function(event, state) {
+			action = $(this).data().labelText.toLowerCase();
+			robotboard.outputSwitch(action, state);
+		});
+		$(".input-switch").click(function() {
+			action = $(this).text().trim().toLowerCase();
+			robotboard.inputClosed(action);
+		});
 	});
 	</script>
 </body>
