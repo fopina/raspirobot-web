@@ -1,6 +1,6 @@
 raspirobot-web
 ==========
-Simple webapp to expose [raspirobotboard](https://github.com/simonmonk/raspirobotboard) methods
+Simple webapp to expose [raspirobotboard](https://github.com/simonmonk/raspirobotboard) methods.  
 There are many, but I wanted my own :)
 
 
